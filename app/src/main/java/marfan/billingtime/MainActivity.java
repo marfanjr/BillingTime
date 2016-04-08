@@ -1,5 +1,6 @@
 package marfan.billingtime;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.design.widget.FloatingActionButton;
@@ -13,6 +14,7 @@ import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Spinner;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -20,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton play;
     private ImageButton stop;
     private EditText task_description;
-    private EditText project_name;
+    private Spinner project_name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
         chronometer = (Chronometer) findViewById(R.id.chronometer);
 
         task_description = (EditText) findViewById(R.id.doing_activity);
-        project_name = (EditText) findViewById(R.id.doing_project);
+        project_name = (Spinner) findViewById(R.id.doing_project);
 
 
 
@@ -81,5 +83,10 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void newProject(View view) {
+        Intent intent = new Intent(this, ProjectActivity.class);
+        startActivity(intent);
     }
 }
