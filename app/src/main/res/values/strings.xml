@@ -2,4 +2,6 @@
     <string name="app_name">BillingTimer</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_project">ProjectActivity</string>
+    <string name="title_activity_main2">Main2Activity</string>
+    <string name="title_activity_task_list">TaskListActivity</string>
 </resources>
