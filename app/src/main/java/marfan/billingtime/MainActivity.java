@@ -17,6 +17,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity  implements AdapterView.OnItemSelectedListener {
 
@@ -25,7 +26,9 @@ public class MainActivity extends AppCompatActivity  implements AdapterView.OnIt
     private ImageButton stop;
     private EditText etTaskDescription;
     private Spinner spnProject;
-
+    private List<Project> projects;
+    private ProjectsRepo projectsRepo;
+    private ArrayAdapter<Project> arrayAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,21 +52,12 @@ public class MainActivity extends AppCompatActivity  implements AdapterView.OnIt
             }
         });
 
-        ArrayList<Project> projects;
+        projectsRepo = new ProjectsRepo(this);
 
-        projects = new ArrayList<Project>();
-        Project project;
-        project = new Project("p1");
-        projects.add(project);
-        project = new Project("p2");
-        projects.add(project);
-        project = new Project("p3");
-        projects.add(project);
-        project = new Project("p4");
-        projects.add(project);
+        projects = projectsRepo.readProjects();
 
         //Cria um ArrayAdapter usando um padrão de layout da classe R do android, passando o ArrayList nomes
-        ArrayAdapter<Project> arrayAdapter = new ArrayAdapter<Project>(this, android.R.layout.simple_spinner_dropdown_item, projects);
+        arrayAdapter = new ArrayAdapter<Project>(this, android.R.layout.simple_spinner_dropdown_item, projects);
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
         spnProject.setAdapter(arrayAdapter);
 
