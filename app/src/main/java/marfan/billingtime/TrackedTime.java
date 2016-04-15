@@ -26,4 +26,11 @@ public class TrackedTime{
         this.endTime = endTime;
     }
 
+    public long differenceInMillis() {
+        long endTimeMilli = getEndTime().getTime();
+        long startTimeMilli = getStartTime().getTime();
+        long diff = endTimeMilli - startTimeMilli;
+        return diff;
+    }
+
 }

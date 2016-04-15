@@ -17,6 +17,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity  implements AdapterView.OnItemSelectedListener {
@@ -26,6 +27,11 @@ public class MainActivity extends AppCompatActivity  implements AdapterView.OnIt
     private ImageButton stop;
     private EditText etTaskDescription;
     private Spinner spnProject;
+
+    private Project currentProject;
+    private Task currentTask;
+    private TrackedTime currentTrackedTime;
+
     private List<Project> projects;
     private ProjectsRepo projectsRepo;
     private ArrayAdapter<Project> arrayAdapter;
@@ -36,11 +42,23 @@ public class MainActivity extends AppCompatActivity  implements AdapterView.OnIt
         setContentView(R.layout.activity_main);
 
         setUiViews();
+
+//        initProjects();
+
+
         play.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                chronometer.setBase(SystemClock.elapsedRealtime());
+                long chronometerBase = SystemClock.elapsedRealtime();
+
+                chronometer.setBase(chronometerBase);
                 chronometer.start();
+
+
+                setCurrentTask();
+                Date newDate = new Date();
+                setCurrentTrackedTimeStart(newDate);
+
 
             }
         });
@@ -49,19 +67,24 @@ public class MainActivity extends AppCompatActivity  implements AdapterView.OnIt
             @Override
             public void onClick(View v) {
                 chronometer.stop();
+                long chronometerBase = chronometer.getBase();
+
+                setCurrentTrackedTimeStop(new Date());
+                currentTask.addTrackedTime(getCurrentTrackedTime());
+                currentProject.addTask(getcurrentTask());
+                projectsRepo.writeProjects(projects);
+
             }
         });
 
-        projectsRepo = new ProjectsRepo(this);
 
-        projects = projectsRepo.readProjects();
+    }
 
-        //Cria um ArrayAdapter usando um padrão de layout da classe R do android, passando o ArrayList nomes
-        arrayAdapter = new ArrayAdapter<Project>(this, android.R.layout.simple_spinner_dropdown_item, projects);
-        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
-        spnProject.setAdapter(arrayAdapter);
-
-        spnProject.setOnItemSelectedListener(this);
+    @Override
+    public void onStart(){
+        super.onStart();
+        initProjects();
+        configSpnProjects();
 
     }
 
@@ -87,7 +110,7 @@ public class MainActivity extends AppCompatActivity  implements AdapterView.OnIt
         return super.onOptionsItemSelected(item);
     }
 
-    public void setUiViews() {
+    private void setUiViews() {
         play = (ImageButton) findViewById(R.id.btn_play);
         stop = (ImageButton) findViewById(R.id.btn_stop);
 
@@ -98,19 +121,61 @@ public class MainActivity extends AppCompatActivity  implements AdapterView.OnIt
 
     }
 
+    private void setCurrentTask() {
+        String taskDescription = etTaskDescription.getText().toString();
+        this.currentTask = new Task(taskDescription);
+    }
+
+    private void setCurrentTrackedTimeStart(Date date) {
+        if (currentTrackedTime == null)
+            currentTrackedTime = new TrackedTime();
+        this.currentTrackedTime.setStartTime(date);
+    }
+
+    private void setCurrentTrackedTimeStop(Date date) {
+        this.currentTrackedTime.setEndTime(date);
+    }
+
+    private TrackedTime getCurrentTrackedTime() {
+        return this.currentTrackedTime;
+    }
+
+    private Task getcurrentTask() {
+        return this.currentTask;
+    }
+
     public void newProject(View view) {
         Intent intent = new Intent(this, ProjectActivity.class);
         startActivity(intent);
     }
 
+    private void initProjects() {
+
+        projectsRepo = new ProjectsRepo(this);
+        projects = projectsRepo.readProjects();
+
+    }
+
+    private void configSpnProjects(){
+        //Cria um ArrayAdapter usando um padrão de layout da classe R do android, passando o ArrayList nomes
+        arrayAdapter = new ArrayAdapter<Project>(this, android.R.layout.simple_spinner_dropdown_item, projects);
+        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
+        spnProject.setAdapter(arrayAdapter);
+
+        spnProject.setOnItemSelectedListener(this);
+    }
+
+
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        Context context = getApplicationContext();
+        currentProject = projects.get(position);
+
         CharSequence text = "Hello toast!" + position   ;
         int duration = Toast.LENGTH_SHORT;
-
-        Toast toast = Toast.makeText(context, text, duration);
+        Toast toast = Toast.makeText(this, text, duration);
         toast.show();
+
+
     }
 
     @Override

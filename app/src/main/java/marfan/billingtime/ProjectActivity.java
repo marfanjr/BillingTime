@@ -1,24 +1,17 @@
 package marfan.billingtime;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.Toast;
 
-import com.google.gson.Gson;
 
-import java.util.ArrayList;
+import java.io.Serializable;
 import java.util.List;
 
 public class ProjectActivity extends AppCompatActivity {
@@ -28,6 +21,9 @@ public class ProjectActivity extends AppCompatActivity {
     private List<Project> projects;
     private ProjectsRepo projectsRepo;
     private ArrayAdapter<Project> arrayAdapter;
+
+
+    private int currentProjectPoject;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,15 +60,27 @@ public class ProjectActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position,
                                     long id) {
                 Project clickedProject = (Project) parent.getAdapter().getItem(position);
+                setCurrentProjectPoject(position);
+                taskList(position);
             }
         });
 
     }
 
-    private void setUiViews(){
+    private void setUiViews() {
         lvProjects = (ListView) findViewById(R.id.projects_list);
         etProject = (EditText) findViewById(R.id.new_project_name);
         btnNewProject = (Button) findViewById(R.id.create_project_btn);
+    }
+
+    private void setCurrentProjectPoject(int currentProjectPoject) {
+        this.currentProjectPoject = currentProjectPoject;
+    }
+
+    public void taskList(int position) {
+        Intent intent = new Intent(this, TaskListActivity.class);
+        intent.putExtra("PROJECT_POSITION", position);
+        startActivity(intent);
     }
 
 }

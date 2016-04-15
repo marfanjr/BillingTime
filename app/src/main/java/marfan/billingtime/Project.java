@@ -1,13 +1,15 @@
 package marfan.billingtime;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by marfan on 4/4/16.
  */
-public class Project {
+public class Project implements Serializable {
     private String name;
-    private ArrayList<Task> tasks;
+    private List<Task> tasks;
 
     public Project (String name) {
         this.name = name;
@@ -24,5 +26,16 @@ public class Project {
     @Override
     public String toString() {
         return name;
+    }
+
+    public void addTask(Task task){
+        if (this.tasks == null)
+            this.tasks = new ArrayList<Task>();
+
+        this.tasks.add(task);
+    }
+
+    public List<Task> getTasks(){
+        return this.tasks;
     }
 }
