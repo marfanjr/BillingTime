@@ -20,13 +20,14 @@ public class Task {
     private ArrayList<TrackedTime> trackedTimes;
 
     public String getDescription() {
+        if (this.description.equals(""))
+            return null;
         return description;
     }
 
     public void setDescription(String description) {
         this.description = description;
     }
-
 
     public ArrayList<TrackedTime> getTrackedTimes() {
         return trackedTimes;
@@ -58,14 +59,16 @@ public class Task {
     @Override
     public String toString() {
         long total = getTotalTime();
-        String dateFormatted = String.format("%02d:%02d:%02d",
-                                            TimeUnit.MILLISECONDS.toHours(total),
-                                            TimeUnit.MILLISECONDS.toMinutes(total) -
-                                            TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(total)), // The change is in this line
-                                            TimeUnit.MILLISECONDS.toSeconds(total) -
-                                            TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(total)));
-        
-        String description = this.description == null ? "Atividade sem descrição" : this.description;
-        return description + "    Total time: " + dateFormatted;
+        int hours = (int) TimeUnit.MILLISECONDS.toHours(total);
+        int minutes = (int) (TimeUnit.MILLISECONDS.toMinutes(total) - TimeUnit.HOURS.toMinutes(hours));
+        int seconds = (int) (TimeUnit.MILLISECONDS.toSeconds(total) - TimeUnit.MINUTES.toSeconds(minutes));
+
+        String dateFormatted = String.format("%02d:%02d:%02d", hours, minutes, seconds);
+
+//        TODO: Pegar essa string do resource de strings
+        String defaultDescription = "Task without description";
+        String description = getDescription() == null ? defaultDescription : this.description;
+
+        return description + " - Total time: " + dateFormatted;
     }
 }

@@ -6,4 +6,5 @@
     <string name="title_activity_task_list">TaskListActivity</string>
     <!-- Messages -->
     <string name="no_projects_error">Você precisa criar um projeto antes de iniciar uma atividade.</string>
+    <string name="default_task_description">Task without description</string>
 </resources>

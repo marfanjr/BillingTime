@@ -25,7 +25,6 @@ public class ProjectsRepo {
     }
 
     public List<Project> readProjects() {
-        //Retrieve the values
         String projectsJSONString = prefs.getString(PROJECTS_KEY, null);
         Type type = new TypeToken<List<Project>>(){}.getType();
 
@@ -35,11 +34,9 @@ public class ProjectsRepo {
     }
 
     public void writeProjects(List projects) {
-        //Set the values
         String favoritesJSONString = new Gson().toJson(projects);
         SharedPreferences.Editor prefEditor = prefs.edit();
         prefEditor.putString(PROJECTS_KEY, favoritesJSONString);
         prefEditor.commit();
-
     }
 }

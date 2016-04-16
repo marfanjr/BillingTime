@@ -42,40 +42,9 @@ public class MainActivity extends AppCompatActivity  implements AdapterView.OnIt
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         setUiViews();
-
-        play.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setCurrentTask();
-
-                long chronometerBase = SystemClock.elapsedRealtime();
-
-                chronometer.setBase(chronometerBase);
-                chronometer.start();
-
-                Date newDate = new Date();
-                setCurrentTrackedTimeStart(newDate);
-
-
-            }
-        });
-
-        stop.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                chronometer.stop();
-                chronometer.setText("00:00");
-                setCurrentTrackedTimeStop(new Date());
-                currentTask.addTrackedTime(getCurrentTrackedTime());
-                currentProject.addTask(getcurrentTask());
-                projectsRepo.writeProjects(projects);
-
-            }
-        });
-
-
+        configBtnPlayComportament();
+        configBtnStopComportament();
     }
 
     @Override
@@ -90,26 +59,46 @@ public class MainActivity extends AppCompatActivity  implements AdapterView.OnIt
         configSpnProjects();
     }
 
-
-
     private void setUiViews() {
         play = (ImageButton) findViewById(R.id.btn_play);
         stop = (ImageButton) findViewById(R.id.btn_stop);
-
         chronometer = (Chronometer) findViewById(R.id.chronometer);
-
         etTaskDescription = (EditText) findViewById(R.id.doing_activity);
         spnProject = (Spinner) findViewById(R.id.doing_project);
-
         btnNewProject = (Button) findViewById(R.id.btn_new_project);
+    }
 
+    private void configBtnPlayComportament(){
+        play.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setCurrentTask();
+                long chronometerBase = SystemClock.elapsedRealtime();
+                chronometer.setBase(chronometerBase);
+                chronometer.start();
+                Date newDate = new Date();
+                setCurrentTrackedTimeStart(newDate);
+            }
+        });
+    }
+
+    private void configBtnStopComportament() {
+        stop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                chronometer.stop();
+                chronometer.setText("00:00");
+                setCurrentTrackedTimeStop(new Date());
+                currentTask.addTrackedTime(getCurrentTrackedTime());
+                currentProject.addTask(getcurrentTask());
+                projectsRepo.writeProjects(projects);
+
+            }
+        });
     }
 
     private void setCurrentTask() {
         String taskDescription = etTaskDescription.getText().toString();
-        if (taskDescription == null) {
-            return;
-        }
         this.currentTask = new Task(taskDescription);
     }
 
@@ -137,35 +126,24 @@ public class MainActivity extends AppCompatActivity  implements AdapterView.OnIt
     }
 
     private void initProjects() {
-
         projectsRepo = new ProjectsRepo(this);
         projects = projectsRepo.readProjects();
-
     }
 
     private void configSpnProjects(){
-        //Cria um ArrayAdapter usando um padrão de layout da classe R do android, passando o ArrayList nomes
         arrayAdapter = new ArrayAdapter<Project>(this, android.R.layout.simple_spinner_dropdown_item, projects);
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
         spnProject.setAdapter(arrayAdapter);
-
         spnProject.setOnItemSelectedListener(this);
     }
-
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         currentProject = projects.get(position);
-
-
-
-
     }
 
     @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-
-    }
+    public void onNothingSelected(AdapterView<?> parent) {}
 
     private void showToast(String msg) {
         int duration = Toast.LENGTH_SHORT;

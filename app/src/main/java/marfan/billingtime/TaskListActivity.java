@@ -24,7 +24,6 @@ public class TaskListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task_list);
-
     }
 
     @Override
@@ -36,31 +35,24 @@ public class TaskListActivity extends AppCompatActivity {
         initProjects();
         initProject(position);
         configLvTasks();
-
     }
 
     private void initProjects() {
-
         projectsRepo = new ProjectsRepo(this);
         projects = projectsRepo.readProjects();
-
     }
-
 
     private void initProject(int position){
         this.project = projects.get(position);
     }
-
 
     private void setUiViews() {
         lvTasks = (ListView) findViewById(R.id.tasks_list);
     }
 
     private void configLvTasks(){
-        //Cria um ArrayAdapter usando um padrão de layout da classe R do android, passando o ArrayList nomes
         arrayAdapter = new ArrayAdapter<Task>(this, android.R.layout.simple_list_item_1, this.project.getTasks());
         lvTasks.setAdapter(arrayAdapter);
-
     }
 
 }

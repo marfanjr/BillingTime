@@ -12,7 +12,6 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 
-import java.io.Serializable;
 import java.util.List;
 
 public class ProjectActivity extends AppCompatActivity {
