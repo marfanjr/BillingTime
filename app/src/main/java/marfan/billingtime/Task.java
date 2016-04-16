@@ -20,8 +20,6 @@ public class Task {
     private ArrayList<TrackedTime> trackedTimes;
 
     public String getDescription() {
-        if (this.description.equals(""))
-            return null;
         return description;
     }
 

@@ -99,6 +99,9 @@ public class MainActivity extends AppCompatActivity  implements AdapterView.OnIt
 
     private void setCurrentTask() {
         String taskDescription = etTaskDescription.getText().toString();
+        if (taskDescription.equals("")) {
+            taskDescription = null;
+        }
         this.currentTask = new Task(taskDescription);
     }
 
