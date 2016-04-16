@@ -4,4 +4,6 @@
     <string name="title_activity_project">ProjectActivity</string>
     <string name="title_activity_main2">Main2Activity</string>
     <string name="title_activity_task_list">TaskListActivity</string>
+    <!-- Messages -->
+    <string name="no_projects_error">Você precisa criar um projeto antes de iniciar uma atividade.</string>
 </resources>

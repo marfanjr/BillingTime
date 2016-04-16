@@ -58,15 +58,14 @@ public class Task {
     @Override
     public String toString() {
         long total = getTotalTime();
-        long second = TimeUnit.MILLISECONDS.toSeconds(total);
-        long minute = TimeUnit.MILLISECONDS.toMinutes(total);
-        long hour = TimeUnit.MILLISECONDS.toHours(total);
         String dateFormatted = String.format("%02d:%02d:%02d",
-                TimeUnit.MILLISECONDS.toHours(total),
-                TimeUnit.MILLISECONDS.toMinutes(total) -
-                        TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(total)), // The change is in this line
-                TimeUnit.MILLISECONDS.toSeconds(total) -
-                        TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(total)));
-        return this.description + " Total time: " + dateFormatted;
+                                            TimeUnit.MILLISECONDS.toHours(total),
+                                            TimeUnit.MILLISECONDS.toMinutes(total) -
+                                            TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(total)), // The change is in this line
+                                            TimeUnit.MILLISECONDS.toSeconds(total) -
+                                            TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(total)));
+        
+        String description = this.description == null ? "Atividade sem descrição" : this.description;
+        return description + "    Total time: " + dateFormatted;
     }
 }

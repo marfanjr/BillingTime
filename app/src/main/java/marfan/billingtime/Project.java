@@ -13,6 +13,7 @@ public class Project implements Serializable {
 
     public Project (String name) {
         this.name = name;
+        this.tasks = new ArrayList<Task>();
     }
 
     public String getName() {

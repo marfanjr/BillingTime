@@ -10,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -27,6 +28,7 @@ public class MainActivity extends AppCompatActivity  implements AdapterView.OnIt
     private ImageButton stop;
     private EditText etTaskDescription;
     private Spinner spnProject;
+    private Button btnNewProject;
 
     private Project currentProject;
     private Task currentTask;
@@ -43,19 +45,16 @@ public class MainActivity extends AppCompatActivity  implements AdapterView.OnIt
 
         setUiViews();
 
-//        initProjects();
-
-
         play.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                setCurrentTask();
+
                 long chronometerBase = SystemClock.elapsedRealtime();
 
                 chronometer.setBase(chronometerBase);
                 chronometer.start();
 
-
-                setCurrentTask();
                 Date newDate = new Date();
                 setCurrentTrackedTimeStart(newDate);
 
@@ -67,8 +66,7 @@ public class MainActivity extends AppCompatActivity  implements AdapterView.OnIt
             @Override
             public void onClick(View v) {
                 chronometer.stop();
-                long chronometerBase = chronometer.getBase();
-
+                chronometer.setText("00:00");
                 setCurrentTrackedTimeStop(new Date());
                 currentTask.addTrackedTime(getCurrentTrackedTime());
                 currentProject.addTask(getcurrentTask());
@@ -84,31 +82,15 @@ public class MainActivity extends AppCompatActivity  implements AdapterView.OnIt
     public void onStart(){
         super.onStart();
         initProjects();
-        configSpnProjects();
-
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        if (projects.isEmpty()) {
+            showToast("Você precisa criar um projeto antes de iniciar uma atividade.");
+            newProject(btnNewProject);
+            return;
         }
-
-        return super.onOptionsItemSelected(item);
+        configSpnProjects();
     }
+
+
 
     private void setUiViews() {
         play = (ImageButton) findViewById(R.id.btn_play);
@@ -119,10 +101,15 @@ public class MainActivity extends AppCompatActivity  implements AdapterView.OnIt
         etTaskDescription = (EditText) findViewById(R.id.doing_activity);
         spnProject = (Spinner) findViewById(R.id.doing_project);
 
+        btnNewProject = (Button) findViewById(R.id.btn_new_project);
+
     }
 
     private void setCurrentTask() {
         String taskDescription = etTaskDescription.getText().toString();
+        if (taskDescription == null) {
+            return;
+        }
         this.currentTask = new Task(taskDescription);
     }
 
@@ -170,10 +157,7 @@ public class MainActivity extends AppCompatActivity  implements AdapterView.OnIt
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         currentProject = projects.get(position);
 
-        CharSequence text = "Hello toast!" + position   ;
-        int duration = Toast.LENGTH_SHORT;
-        Toast toast = Toast.makeText(this, text, duration);
-        toast.show();
+
 
 
     }
@@ -181,5 +165,11 @@ public class MainActivity extends AppCompatActivity  implements AdapterView.OnIt
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
+    }
+
+    private void showToast(String msg) {
+        int duration = Toast.LENGTH_SHORT;
+        Toast toast = Toast.makeText(this, msg, duration);
+        toast.show();
     }
 }

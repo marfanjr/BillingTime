@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 
 import java.io.Serializable;
@@ -23,7 +24,7 @@ public class ProjectActivity extends AppCompatActivity {
     private ArrayAdapter<Project> arrayAdapter;
 
 
-    private int currentProjectPoject;
+    private int currentProjectPosition;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +61,7 @@ public class ProjectActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position,
                                     long id) {
                 Project clickedProject = (Project) parent.getAdapter().getItem(position);
-                setCurrentProjectPoject(position);
+                setCurrentProjectPosition(position);
                 taskList(position);
             }
         });
@@ -73,14 +74,22 @@ public class ProjectActivity extends AppCompatActivity {
         btnNewProject = (Button) findViewById(R.id.create_project_btn);
     }
 
-    private void setCurrentProjectPoject(int currentProjectPoject) {
-        this.currentProjectPoject = currentProjectPoject;
+    private void setCurrentProjectPosition(int currentProjectPosition) {
+        this.currentProjectPosition = currentProjectPosition;
     }
 
     public void taskList(int position) {
+        if (projects.get(currentProjectPosition).getTasks().isEmpty()) {
+            showToast("Este projeto não possui nenhuma atividade");
+            return;
+        }
         Intent intent = new Intent(this, TaskListActivity.class);
         intent.putExtra("PROJECT_POSITION", position);
         startActivity(intent);
     }
-
+    private void showToast(String msg) {
+        int duration = Toast.LENGTH_SHORT;
+        Toast toast = Toast.makeText(this, msg, duration);
+        toast.show();
+    }
 }
